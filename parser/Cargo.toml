@@ -1,0 +1,13 @@
+[package]
+name = "dhdl-parser"
+version = "0.1.0"
+authors = ["Sergey Kvachonok <ravenexp@gmail.com>"]
+description = "parser library for DHDL"
+license = "GPL-3.0"
+build = "build.rs"
+
+[build-dependencies]
+lalrpop = "0.12.1"
+
+[dependencies]
+lalrpop-util = "0.12.1"

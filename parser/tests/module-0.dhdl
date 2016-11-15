@@ -1,0 +1,26 @@
+module testmodule0;
+
+entity simple
+(
+	a : in signal;
+	b : out signal;
+	vdd : in power;
+	gnd : in ground;
+);
+
+end entity simple;
+
+entity simple2
+(
+	a2 : signal;
+	b2 : signal;
+	vdd2 : out power;
+	gnd2 : in ground;
+);
+
+end entity simple2;
+
+entity simple3;
+end entity simple3;
+
+end module testmodule0;

@@ -1,0 +1,12 @@
+[package]
+name = "dhdl"
+version = "0.1.0"
+authors = ["Sergey Kvachonok <ravenexp@gmail.com>"]
+description = "discrete HDL for PCB design"
+keywords = ["HDL", "EDA"]
+license = "GPL-3.0"
+repository = "https://github.com/ravenexp/dhdl.git"
+readme = "README.md"
+
+[dependencies]
+dhdl-parser = { path = "parser", version = "0.1.0" }
