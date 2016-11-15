@@ -15,29 +15,63 @@ EntityDecls: Vec<EntityDecl> = { EntityDecl* };
 
 EntityDecl: EntityDecl = {
     "entity" <name: ident> <ports: (PortDecls)?> ";"
+    <wires: WireDecls>
+    <insts: EntityInsts>
     "end" "entity" <endname: ident> ";"
-        => EntityDecl { name: name, ports: ports, endname: endname }
+        => EntityDecl {
+            name: name,
+            ports: ports,
+            wires: wires,
+            insts: insts,
+            endname: endname
+        }
 };
 
-PortDecls: Vec<PortDecl> = { "(" <(<PortDecl> ";")+> ")" };
+PortDecls: Vec<PortDecl> = { "(" <PortDecl+> ")" };
 
 PortDecl: PortDecl = {
-    <name: ident> ":" <dir: (direction)?> <class: ident>
+    <name: ident> ":" <dir: portdir> <class: ident> ";"
         => PortDecl { name: name, dir: dir, class: class }
 };
 
 WireDecls: Vec<WireDecl> = { WireDecl* };
 
 WireDecl: WireDecl = {
-    <name: ident> ":" <class: ident> ";"
+    "wire" <name: ident> ":" <class: ident> ";"
         => WireDecl { name: name, class: class }
+};
+
+EntityInsts: Vec<EntityInst> = { EntityInst* };
+
+EntityInst: EntityInst = {
+    "put" <name: ident> ":" <entity: ident>
+        "(" <ports: PortAssigns> ")" ";"
+        => EntityInst {
+            name: name,
+            entity: entity,
+            ports: ports
+        }
+};
+
+PortAssigns: Vec<PortAssign> = { PortAssign+ };
+
+PortAssign: PortAssign = {
+    <port: ident> <dir: portassign> <wire: ident> ";"
+        => PortAssign { port: port, dir: dir, wire: wire }
 };
 
 // Terminals
 
-direction: Direction = {
+portdir: Direction = {
+    ()    => Direction::None,
     "in"  => Direction::In,
     "out" => Direction::Out
+};
+
+portassign: Direction = {
+    "==" => Direction::None,
+    "<=" => Direction::In,
+    "=>" => Direction::Out
 };
 
 ident: Ident = {

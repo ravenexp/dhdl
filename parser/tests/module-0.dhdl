@@ -8,6 +8,16 @@ entity simple
 	gnd : in ground;
 );
 
+wire a: signal;
+wire gnd2: ground;
+
+put inst0 : simple2
+(
+	a2  == a;
+	gnd <= gnd2;
+	a1  => b;
+);
+
 end entity simple;
 
 entity simple2
@@ -17,6 +27,12 @@ entity simple2
 	vdd2 : out power;
 	gnd2 : in ground;
 );
+
+wire local : power;
+wire local1 : power;
+
+put inst1 : simple3(a == b;);
+put inst2 : simple(c <= d;);
 
 end entity simple2;
 
