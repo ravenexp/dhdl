@@ -14,17 +14,28 @@ pub ModuleDecl: ModuleDecl = {
 EntityDecls: Vec<EntityDecl> = { EntityDecl* };
 
 EntityDecl: EntityDecl = {
-    "entity" <name: ident> <ports: (PortDecls)?> ";"
+    "entity" <name: ident>
+        <generics: (GenericDecls)?>
+        <ports: (PortDecls)?>
+    ";"
     <wires: WireDecls>
     <insts: EntityInsts>
     "end" "entity" <endname: ident> ";"
         => EntityDecl {
             name: name,
+            generics: generics,
             ports: ports,
             wires: wires,
             insts: insts,
             endname: endname
         }
+};
+
+GenericDecls: Vec<GenericDecl> = { "<" <GenericDecl+> ">" };
+
+GenericDecl: GenericDecl = {
+    <name: ident> ":" <gentype: ident> ";"
+        => GenericDecl { name: name, gentype: gentype }
 };
 
 PortDecls: Vec<PortDecl> = { "(" <PortDecl+> ")" };
@@ -45,19 +56,34 @@ EntityInsts: Vec<EntityInst> = { EntityInst* };
 
 EntityInst: EntityInst = {
     "put" <name: ident> ":" <entity: ident>
-        "(" <ports: PortAssigns> ")" ";"
+        <generics: (GenericAssigns)?>
+        <ports: (PortAssigns)?>
+    ";"
         => EntityInst {
             name: name,
             entity: entity,
+            generics: generics,
             ports: ports
         }
 };
 
-PortAssigns: Vec<PortAssign> = { PortAssign+ };
+GenericAssigns: Vec<GenericAssign> = { "<" <GenericAssign+> ">" };
+
+GenericAssign: GenericAssign = {
+    <generic: ident> ":=" <value: GenExpr> ";"
+        => GenericAssign { generic: generic, value: value }
+};
+
+PortAssigns: Vec<PortAssign> = { "(" <PortAssign+> ")" };
 
 PortAssign: PortAssign = {
     <port: ident> <dir: portassign> <wire: ident> ";"
         => PortAssign { port: port, dir: dir, wire: wire }
+};
+
+GenExpr: GenExpr = {
+    number => GenExpr::Number(<>),
+    string => GenExpr::String(<>)
 };
 
 // Terminals
@@ -80,4 +106,8 @@ ident: Ident = {
 
 number: Number = {
     r"[0-9]+" => Number(String::from(<>))
+};
+
+string: String = {
+    r"'[^']*'" => String::from(<>)
 };

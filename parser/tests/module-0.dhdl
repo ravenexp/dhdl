@@ -21,6 +21,10 @@ put inst0 : simple2
 end entity simple;
 
 entity simple2
+<
+	value : string;
+	case : size;
+>
 (
 	a2 : signal;
 	b2 : signal;
@@ -32,7 +36,8 @@ wire local : power;
 wire local1 : power;
 
 put inst1 : simple3(a == b;);
-put inst2 : simple(c <= d;);
+put inst2 : simple<value := 10;>(c <= d;);
+put inst3 : simple2(c <= d; f => g;);
 
 end entity simple2;
 
