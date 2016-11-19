@@ -9,4 +9,4 @@ repository = "https://github.com/ravenexp/dhdl.git"
 readme = "README.md"
 
 [dependencies]
-dhdl-parser = { path = "parser", version = "0.1.0" }
+dhdl-parser = { path = "parser", version = "0.1" }
