@@ -1,47 +1,65 @@
 module testmodule0;
 
 entity simple
-(
+port {
 	a : in signal;
 	b : out signal;
+	c : test;
 	vdd : in power;
 	gnd : in ground;
-);
+};
 
 wire a: signal;
 wire gnd2: ground;
 
 put inst0 : simple2
-(
+port {
 	a2  == a;
 	gnd <= gnd2;
 	a1  => b;
-);
+};
 
 end entity simple;
 
 entity simple2
-<
+generic {
 	value : string;
 	case : size;
->
-(
+}
+port {
 	a2 : signal;
 	b2 : signal;
 	vdd2 : out power;
 	gnd2 : in ground;
-);
+};
 
 wire local : power;
 wire local1 : power;
 
-put inst1 : simple3(a == b;);
-put inst2 : simple<value := 10;>(c <= d;);
-put inst3 : simple2(c <= d; f => g;);
+put inst1 : simple3 port { a == b; };
+put inst2 : simple
+generic {
+	value := 10;
+}
+port {
+	c <= d;
+};
+
+put inst3 : simple2 port {
+    c <= d;
+    f => g;
+};
 
 end entity simple2;
 
 entity simple3;
+
+put inst0 : simple2
+port {
+     a <= c;
+     t => q;
+};
+
 end entity simple3;
 
 end module testmodule0;

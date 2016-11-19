@@ -31,14 +31,14 @@ EntityDecl: EntityDecl = {
         }
 };
 
-GenericDecls: Vec<GenericDecl> = { "<" <GenericDecl+> ">" };
+GenericDecls: Vec<GenericDecl> = { "generic" "{" <GenericDecl+> "}" };
 
 GenericDecl: GenericDecl = {
     <name: ident> ":" <gentype: ident> ";"
         => GenericDecl { name: name, gentype: gentype }
 };
 
-PortDecls: Vec<PortDecl> = { "(" <PortDecl+> ")" };
+PortDecls: Vec<PortDecl> = { "port" "{" <PortDecl+> "}" };
 
 PortDecl: PortDecl = {
     <name: ident> ":" <dir: portdir> <class: ident> ";"
@@ -67,14 +67,14 @@ EntityInst: EntityInst = {
         }
 };
 
-GenericAssigns: Vec<GenericAssign> = { "<" <GenericAssign+> ">" };
+GenericAssigns: Vec<GenericAssign> = { "generic" "{" <GenericAssign+> "}" };
 
 GenericAssign: GenericAssign = {
     <generic: ident> ":=" <value: GenExpr> ";"
         => GenericAssign { generic: generic, value: value }
 };
 
-PortAssigns: Vec<PortAssign> = { "(" <PortAssign+> ")" };
+PortAssigns: Vec<PortAssign> = { "port" "{" <PortAssign+> "}" };
 
 PortAssign: PortAssign = {
     <port: ident> <dir: portassign> <wire: ident> ";"
