@@ -70,7 +70,7 @@ EntityInst: EntityInst = {
 GenericAssigns: Vec<GenericAssign> = { "generic" "{" <GenericAssign+> "}" };
 
 GenericAssign: GenericAssign = {
-    <generic: ident> ":=" <value: GenExpr> ";"
+    <generic: ident> ":=" <value: ConstExpr> ";"
         => GenericAssign { generic: generic, value: value }
 };
 
@@ -81,9 +81,10 @@ PortAssign: PortAssign = {
         => PortAssign { port: port, dir: dir, wire: wire }
 };
 
-GenExpr: GenExpr = {
-    number => GenExpr::Number(<>),
-    string => GenExpr::String(<>)
+ConstExpr: ConstExpr = {
+    ident  => ConstExpr::Ident(<>),
+    number => ConstExpr::Number(<>),
+    string => ConstExpr::String(<>)
 };
 
 // Terminals
@@ -109,5 +110,5 @@ number: Number = {
 };
 
 string: String = {
-    r"'[^']*'" => String::from(<>)
+    r#""[^"]*""# => String::from(<>)
 };

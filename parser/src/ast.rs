@@ -38,7 +38,7 @@ pub struct EntityInst {
 
 pub struct GenericAssign {
     pub generic: Ident,
-    pub value: GenExpr
+    pub value: ConstExpr
 }
 
 pub struct PortAssign {
@@ -47,7 +47,8 @@ pub struct PortAssign {
     pub wire: Ident
 }
 
-pub enum GenExpr {
+pub enum ConstExpr {
+    Ident(Ident),
     Number(Number),
     String(String)
 }
