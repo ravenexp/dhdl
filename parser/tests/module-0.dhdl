@@ -3,7 +3,7 @@ module testmodule0;
 component resistor
 generic {
 	value : string;
-	case : size;
+	case : size := C0603;
 }
 port {
 	a2 : signal;
@@ -22,7 +22,7 @@ end component resistor;
 component capacitor
 generic {
 	value : string;
-	case : size;
+	case : size := 5;
 }
 port {
 	test1 : signal;
@@ -61,7 +61,7 @@ end entity simple;
 entity simple2
 generic {
 	value : string;
-	case : size;
+	case : size := "SMB";
 }
 port {
 	a2 : signal;

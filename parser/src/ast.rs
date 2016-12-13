@@ -24,7 +24,8 @@ pub struct ComponentDecl {
 
 pub struct GenericDecl {
     pub name: Ident,
-    pub gentype: Ident
+    pub gentype: Ident,
+    pub defval: Option<ConstExpr>
 }
 
 pub struct PortDecl {
