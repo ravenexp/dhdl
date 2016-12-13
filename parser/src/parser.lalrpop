@@ -5,10 +5,10 @@ use ast::*;
 grammar;
 
 pub ModuleDecl: ModuleDecl = {
-    "module" <name: ident> ";"
+    "module" <name: Ident> ";"
     <components: ComponentDecls>
     <entities: EntityDecls>
-    "end" "module" <endname: ident> ";"
+    "end" "module" <endname: Ident> ";"
         => ModuleDecl {
             name: name,
             components: components,
@@ -20,13 +20,13 @@ pub ModuleDecl: ModuleDecl = {
 EntityDecls: Vec<EntityDecl> = { EntityDecl* };
 
 EntityDecl: EntityDecl = {
-    "entity" <name: ident>
+    "entity" <name: Ident>
         <generics: GenericDecls?>
         <ports: PortDecls?>
     ";"
     <wires: WireDecls>
     <insts: EntityInsts>
-    "end" "entity" <endname: ident> ";"
+    "end" "entity" <endname: Ident> ";"
         => EntityDecl {
             name: name,
             generics: generics,
@@ -40,12 +40,12 @@ EntityDecl: EntityDecl = {
 ComponentDecls: Vec<ComponentDecl> = { ComponentDecl* };
 
 ComponentDecl: ComponentDecl = {
-    "component" <name: ident>
+    "component" <name: Ident>
         <generics: GenericDecls?>
         <ports: PortDecls?>
     ";"
     <attributes: AttributeDefs>
-    "end" "component" <endname: ident> ";"
+    "end" "component" <endname: Ident> ";"
         => ComponentDecl {
             name: name,
             generics: generics,
@@ -58,7 +58,7 @@ ComponentDecl: ComponentDecl = {
 GenericDecls: Vec<GenericDecl> = { "generic" "{" <GenericDecl+> "}" };
 
 GenericDecl: GenericDecl = {
-    <name: ident> ":" <gentype: ident> <defval: GenericDeclValue?> ";"
+    <name: Ident> ":" <gentype: Ident> <defval: GenericDeclValue?> ";"
         => GenericDecl { name: name, gentype: gentype, defval: defval }
 };
 
@@ -69,28 +69,28 @@ GenericDeclValue: ConstExpr = {
 PortDecls: Vec<PortDecl> = { "port" "{" <PortDecl+> "}" };
 
 PortDecl: PortDecl = {
-    <name: ident> ":" <dir: portdir> <class: ident> ";"
+    <name: Ident> ":" <dir: portdir> <class: Ident> ";"
         => PortDecl { name: name, dir: dir, class: class }
 };
 
 AttributeDefs: Vec<AttributeDef> = { AttributeDef* };
 
 AttributeDef: AttributeDef = {
-    "attribute" <name: ident> ":" <typename: ident> ":=" <value: ConstExpr> ";"
+    "attribute" <name: Ident> ":" <typename: Ident> ":=" <value: ConstExpr> ";"
         => AttributeDef { name: name, typename: typename, value: value }
 };
 
 WireDecls: Vec<WireDecl> = { WireDecl* };
 
 WireDecl: WireDecl = {
-    "wire" <name: ident> ":" <class: ident> ";"
+    "wire" <name: Ident> ":" <class: Ident> ";"
         => WireDecl { name: name, class: class }
 };
 
 EntityInsts: Vec<EntityInst> = { EntityInst* };
 
 EntityInst: EntityInst = {
-    "put" <name: ident> ":" <entity: ident>
+    "put" <name: Ident> ":" <entity: Ident>
         <generics: GenericAssigns?>
         <ports: PortAssigns?>
     ";"
@@ -105,21 +105,21 @@ EntityInst: EntityInst = {
 GenericAssigns: Vec<GenericAssign> = { "generic" "{" <GenericAssign+> "}" };
 
 GenericAssign: GenericAssign = {
-    <generic: ident> ":=" <value: ConstExpr> ";"
+    <generic: Ident> ":=" <value: ConstExpr> ";"
         => GenericAssign { generic: generic, value: value }
 };
 
 PortAssigns: Vec<PortAssign> = { "port" "{" <PortAssign+> "}" };
 
 PortAssign: PortAssign = {
-    <port: ident> <dir: portassign> <wire: ident> ";"
+    <port: Ident> <dir: portassign> <wire: Ident> ";"
         => PortAssign { port: port, dir: dir, wire: wire }
 };
 
 ConstExpr: ConstExpr = {
-    ident  => ConstExpr::Ident(<>),
-    number => ConstExpr::Number(<>),
-    string => ConstExpr::String(<>)
+    Ident  => ConstExpr::Ident(<>),
+    Number => ConstExpr::Number(<>),
+    String => ConstExpr::String(<>)
 };
 
 // Terminals
@@ -136,14 +136,14 @@ portassign: Direction = {
     "=>" => Direction::Out
 };
 
-ident: Ident = {
+Ident: Ident = {
     r"[a-zA-Z][a-zA-Z0-9]*" => Ident(String::from(<>))
 };
 
-number: Number = {
+Number: Number = {
     r"[0-9]+" => Number(String::from(<>))
 };
 
-string: String = {
+String: String = {
     r#""[^"]*""# => String::from(<>)
 };
