@@ -4,6 +4,8 @@ use ast::*;
 #[recursive_ascent]
 grammar;
 
+// Grammar constructs
+
 pub ModuleDecl: ModuleDecl = {
     "module" <name: Ident> ";"
     <components: ComponentDecls>
@@ -90,11 +92,30 @@ WireDecl: WireDecl = {
 EntityInsts: Vec<EntityInst> = { EntityInst* };
 
 EntityInst: EntityInst = {
+    EntityInstShort => EntityInst::Short(<>),
+    EntityInstLong => EntityInst::Long(<>)
+};
+
+EntityInstShort: EntityInstShort = {
+    "put" <name: Ident> <ports: InstPortList> ":"
+     <entity: Ident> <generics: InstGenericList?> ";"
+        => EntityInstShort {
+            name: name,
+            ports: ports,
+            entity: entity,
+            generics: generics
+        }
+};
+
+InstPortList: CommaList<Ident> = { "(" < CommaList<Ident> > ")" };
+InstGenericList: CommaList<ConstExpr> = { "(" < CommaList<ConstExpr> > ")" };
+
+EntityInstLong: EntityInstLong = {
     "put" <name: Ident> ":" <entity: Ident>
         <generics: GenericAssigns?>
         <ports: PortAssigns?>
     ";"
-        => EntityInst {
+        => EntityInstLong {
             name: name,
             entity: entity,
             generics: generics,
@@ -115,6 +136,15 @@ PortAssign: PortAssign = {
     <port: Ident> <dir: portassign> <wire: Ident> ";"
         => PortAssign { port: port, dir: dir, wire: wire }
 };
+
+// Macros
+
+CommaList<T>: CommaList<T> = {
+    <head: (<T> ",")*> <tail: T>
+        => CommaList { head: head, tail: tail }
+};
+
+// Expressions
 
 ConstExpr: ConstExpr = {
     Ident  => ConstExpr::Ident(<>),

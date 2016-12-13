@@ -45,7 +45,19 @@ pub struct WireDecl {
     pub class: Ident
 }
 
-pub struct EntityInst {
+pub enum EntityInst {
+    Short(EntityInstShort),
+    Long(EntityInstLong)
+}
+
+pub struct EntityInstShort {
+    pub name: Ident,
+    pub ports: CommaList<Ident>,
+    pub entity: Ident,
+    pub generics: Option<CommaList<ConstExpr>>
+}
+
+pub struct EntityInstLong {
     pub name: Ident,
     pub entity: Ident,
     pub generics: Option<Vec<GenericAssign>>,
@@ -61,6 +73,11 @@ pub struct PortAssign {
     pub port: Ident,
     pub dir: Direction,
     pub wire: Ident
+}
+
+pub struct CommaList<T> {
+    pub head: Vec<T>,
+    pub tail: T
 }
 
 pub enum ConstExpr {

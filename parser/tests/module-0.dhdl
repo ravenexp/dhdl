@@ -56,6 +56,8 @@ port {
 	a1  => b;
 };
 
+put inst1(f) : simple2(2, "Foo");
+
 end entity simple;
 
 entity simple2
@@ -87,6 +89,10 @@ put inst3 : simple2 port {
     f => g;
 };
 
+put inst4(f) : simple3;
+
+put inst5(f,g,h,j) : simple4 ("10", 10, simple2);
+
 end entity simple2;
 
 entity simple3;
@@ -96,6 +102,10 @@ port {
      a <= c;
      t => q;
 };
+
+put inst1(e, f, g) : simple("100");
+
+put inst2(f) : simple4(inst1);
 
 end entity simple3;
 
