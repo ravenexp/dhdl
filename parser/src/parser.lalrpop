@@ -6,9 +6,15 @@ grammar;
 
 pub ModuleDecl: ModuleDecl = {
     "module" <name: ident> ";"
+    <components: ComponentDecls>
     <entities: EntityDecls>
     "end" "module" <endname: ident> ";"
-        => ModuleDecl { name: name, entities: entities, endname: endname }
+        => ModuleDecl {
+            name: name,
+            components: components,
+            entities: entities,
+            endname: endname
+        }
 };
 
 EntityDecls: Vec<EntityDecl> = { EntityDecl* };
@@ -31,6 +37,24 @@ EntityDecl: EntityDecl = {
         }
 };
 
+ComponentDecls: Vec<ComponentDecl> = { ComponentDecl* };
+
+ComponentDecl: ComponentDecl = {
+    "component" <name: ident>
+        <generics: (GenericDecls)?>
+        <ports: (PortDecls)?>
+    ";"
+    <attributes: AttributeDefs>
+    "end" "component" <endname: ident> ";"
+        => ComponentDecl {
+            name: name,
+            generics: generics,
+            ports: ports,
+            attributes: attributes,
+            endname: endname
+        }
+};
+
 GenericDecls: Vec<GenericDecl> = { "generic" "{" <GenericDecl+> "}" };
 
 GenericDecl: GenericDecl = {
@@ -43,6 +67,13 @@ PortDecls: Vec<PortDecl> = { "port" "{" <PortDecl+> "}" };
 PortDecl: PortDecl = {
     <name: ident> ":" <dir: portdir> <class: ident> ";"
         => PortDecl { name: name, dir: dir, class: class }
+};
+
+AttributeDefs: Vec<AttributeDef> = { AttributeDef* };
+
+AttributeDef: AttributeDef = {
+    "attribute" <name: ident> ":" <typename: ident> ":=" <value: ConstExpr> ";"
+        => AttributeDef { name: name, typename: typename, value: value }
 };
 
 WireDecls: Vec<WireDecl> = { WireDecl* };
