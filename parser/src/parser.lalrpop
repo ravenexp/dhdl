@@ -1,6 +1,5 @@
 use ast::*;
 
-#[LALR]
 #[recursive_ascent]
 grammar;
 
